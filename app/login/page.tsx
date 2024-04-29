@@ -1,78 +1,16 @@
 import Link from "next/link";
-import { headers } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import { ArrowIcon } from "@/components/icons/Arrow";
+import { signIn, signUp } from "./actions";
 
-export default function Login({
-    searchParams,
-}: {
-    searchParams: { message: string };
-}) {
-    const signIn = async (formData: FormData) => {
-        "use server";
-
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const supabase = createClient();
-
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
-        }
-
-        return redirect("/protected");
-    };
-
-    const signUp = async (formData: FormData) => {
-        "use server";
-
-        const origin = headers().get("origin");
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const supabase = createClient();
-
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${origin}/auth/callback`,
-            },
-        });
-
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
-        }
-
-        return redirect(
-            "/login?message=Check email to continue sign in process"
-        );
-    };
-
+export default function Login() {
     return (
         <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
             <Link
                 href="/"
                 className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-                >
-                    <polyline points="15 18 9 12 15 6" />
-                </svg>{" "}
+                <ArrowIcon className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                 Back
             </Link>
 
@@ -123,23 +61,18 @@ export default function Login({
                     />
                     <SubmitButton
                         formAction={signIn}
-                        className="border w-full lg:w-auto rounded-2xl border-black px-16 py-3 font-quicksand font-semibold text-18 hover:bg-gradient-to-r from-teal-400 via-purple-400 to-green-400 bg-clip-border hover:border-transparent animate-text ease-out duration-200 hover:text-white/80 mt-3"
+                        className="mt-3"
                         pendingText="Signing In..."
                     >
                         Sign In
                     </SubmitButton>
                     <SubmitButton
                         formAction={signUp}
-                        className="border w-full lg:w-auto rounded-2xl border-black px-16 py-3 font-quicksand font-semibold text-18 hover:bg-gradient-to-r from-teal-400 via-purple-400 to-green-400 bg-clip-border hover:border-transparent animate-text ease-out duration-200 hover:text-white/80 mt-3"
+                        className="mt-3"
                         pendingText="Signing Up..."
                     >
                         Sign Up
                     </SubmitButton>
-                    {searchParams?.message && (
-                        <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-                            {searchParams.message}
-                        </p>
-                    )}
                 </form>
             </div>
         </div>

@@ -1,6 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
+// Since Server Components can't write cookies, need middleware to refresh expired Auth tokens and store them
 export const updateSession = async (request: NextRequest) => {
     try {
         // Create an unmodified response
