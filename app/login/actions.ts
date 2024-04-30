@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
+const usernameSchema = z.string();
 const emailSchema = z.string();
 const passwordSchema = z.string();
 
@@ -39,15 +40,21 @@ export const signUp = async (formData: FormData) => {
     const supabase = createClient();
     const origin = headers().get("origin");
 
+    const parseUsername = usernameSchema.safeParse(formData.get("username"));
     const parseEmail = emailSchema.safeParse(formData.get("email"));
     const parsePassword = passwordSchema.safeParse(formData.get("password"));
 
-    if (!parseEmail.success || !parsePassword.success) {
+    if (
+        !parseEmail.success ||
+        !parsePassword.success ||
+        !parseUsername.success
+    ) {
         return redirect(
             "/error?message=Error: Please provide a valid email or password."
         );
     }
 
+    const username = parseUsername.data;
     const email = parseEmail.data;
     const password = parsePassword.data;
 
@@ -55,6 +62,9 @@ export const signUp = async (formData: FormData) => {
         email,
         password,
         options: {
+            data: {
+                username,
+            },
             emailRedirectTo: `${origin}/auth/callback`,
         },
     });

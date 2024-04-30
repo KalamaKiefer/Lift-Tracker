@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ContentContainer } from "./ContentContainer";
+import { Button } from "./Button";
 
 export const HomeHero = () => {
     return (
@@ -27,16 +28,8 @@ export const HomeHero = () => {
             </div>
 
             <div className="mt-5 lg:mt-8 flex flex-col items-center lg:flex-row gap-4">
-                <Link href="/login" className="w-full lg:w-auto">
-                    <button className="border w-full lg:w-auto rounded-2xl border-black px-16 py-3 font-quicksand font-semibold text-18 hover:bg-gradient-to-r from-teal-400 via-purple-400 to-green-400 bg-clip-border hover:border-transparent animate-text ease-out duration-200 hover:text-white/80">
-                        Login
-                    </button>
-                </Link>
-                <Link href="/login">
-                    <button className="border rounded-2xl border-black px-16 py-3 font-quicksand font-semibold text-18 hover:bg-gradient-to-r from-teal-400 via-purple-400 to-green-400 bg-clip-border hover:border-transparent animate-text ease-out duration-200 hover:text-white/80">
-                        Sign Up
-                    </button>
-                </Link>
+                <Button href="/login">Login</Button>
+                <Button href="/signup">Sign Up</Button>
             </div>
         </ContentContainer>
     );
