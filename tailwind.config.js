@@ -50,9 +50,19 @@ module.exports = {
                 90: "90px",
                 100: "100px",
             },
-            colors: {},
+            colors: {
+                matteBlack: "#171717",
+
+                creme: "#fefae0",
+
+                green: {
+                    primary: "#606c38",
+                },
+            },
             animation: {
                 text: "text 4s ease infinite",
+                "overlay-show": "overlay-show 350ms cubic-bezier(.4, 0, .6 ,1)",
+                "content-show": "content-show 350ms cubic-bezier(.4, 0, .6 ,1)",
             },
             keyframes: {
                 text: {
@@ -64,6 +74,22 @@ module.exports = {
                         "background-size": "200% 200%",
                         "background-position": "right center",
                     },
+                },
+                "overlay-show": {
+                    from: { opacity: "0" },
+                    to: { opacity: "1" },
+                },
+                "content-show": {
+                    from: { opacity: "0", transform: "translateY(-5%)" },
+                    to: { opacity: "1", transform: "translateY(0%)" },
+                },
+                "slide-down": {
+                    from: { height: "0" },
+                    to: { height: "var(--radix-collapsible-content-height)" },
+                },
+                "slide-up": {
+                    from: { height: "var(--radix-collapsible-content-height)" },
+                    to: { height: "0" },
                 },
             },
         },
