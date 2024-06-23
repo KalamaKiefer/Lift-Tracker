@@ -1,5 +1,4 @@
 import "./globals.css";
-import clsx from "clsx";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
