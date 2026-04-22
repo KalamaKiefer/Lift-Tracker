@@ -19,7 +19,7 @@ const quicksand = Quicksand({
   style: ["normal"],
 });
 
-export default function RootLayout({
+export default function WorkoutsLayout({
   children,
 }: {
   children: React.ReactNode;

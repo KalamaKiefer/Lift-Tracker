@@ -147,10 +147,11 @@ $$;
 -- Auto create a profile row whenever a user signs up.
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER
-LANGUAGE plpgsql SECURITY DEFINER
+LANGUAGE plpgsql
+SECURITY DEFINER SET search_path = ''
 AS $$
 BEGIN
-    INSERT INTO profiles (id, username, display_name)
+    INSERT INTO public.profiles (id, username, display_name)
     VALUES (
         NEW.id,
         COALESCE(

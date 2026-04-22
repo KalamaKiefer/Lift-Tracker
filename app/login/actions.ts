@@ -5,57 +5,71 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
-const emailSchema = z.string().email();
+const emailSchema = z.email();
 const passwordSchema = z.string().min(8);
 const usernameSchema = z.string().min(2).max(30);
 
-export const signIn = async (formData: FormData) => {
-    const supabase = await createClient();
+export type ActionState = { error: string } | null;
 
-    const parseEmail = emailSchema.safeParse(formData.get("email"));
-    const parsePassword = passwordSchema.safeParse(formData.get("password"));
+export const signIn = async (
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> => {
+  const supabase = await createClient();
 
-    if (!parseEmail.success || !parsePassword.success) {
-        return redirect("/error?message=Please provide a valid email and password.");
-    }
+  const parseEmail = emailSchema.safeParse(formData.get("email"));
+  if (!parseEmail.success)
+    return { error: "Please enter a valid email address." };
 
-    const { error } = await supabase.auth.signInWithPassword({
-        email: parseEmail.data,
-        password: parsePassword.data,
-    });
+  const parsePassword = passwordSchema.safeParse(formData.get("password"));
+  if (!parsePassword.success)
+    return { error: "Password must be at least 8 characters." };
 
-    if (error) {
-        return redirect("/error?message=Invalid email or password.");
-    }
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parseEmail.data,
+    password: parsePassword.data,
+  });
 
-    return redirect("/home");
+  if (error) return { error: "Invalid email or password." };
+
+  redirect("/home");
 };
 
-export const signUp = async (formData: FormData) => {
-    const supabase = await createClient();
-    const headerStore = await headers();
-    const origin = headerStore.get("origin");
+export const signUp = async (
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> => {
+  const supabase = await createClient();
+  const headerStore = await headers();
+  const origin = headerStore.get("origin");
 
-    const parseUsername = usernameSchema.safeParse(formData.get("username"));
-    const parseEmail = emailSchema.safeParse(formData.get("email"));
-    const parsePassword = passwordSchema.safeParse(formData.get("password"));
+  const parseUsername = usernameSchema.safeParse(formData.get("username"));
+  if (!parseUsername.success)
+    return { error: "Username must be between 2 and 30 characters." };
 
-    if (!parseEmail.success || !parsePassword.success || !parseUsername.success) {
-        return redirect("/error?message=Please provide a valid username, email, and password (8+ characters).");
-    }
+  const parseEmail = emailSchema.safeParse(formData.get("email"));
+  if (!parseEmail.success)
+    return { error: "Please enter a valid email address." };
 
-    const { error } = await supabase.auth.signUp({
-        email: parseEmail.data,
-        password: parsePassword.data,
-        options: {
-            data: { username: parseUsername.data },
-            emailRedirectTo: `${origin}/auth/callback`,
-        },
-    });
+  const parsePassword = passwordSchema.safeParse(formData.get("password"));
+  if (!parsePassword.success)
+    return { error: "Password must be at least 8 characters." };
 
-    if (error) {
-        return redirect("/error?message=Could not create account. The email may already be in use.");
-    }
+  const { error } = await supabase.auth.signUp({
+    email: parseEmail.data,
+    password: parsePassword.data,
+    options: {
+      data: { username: parseUsername.data },
+      emailRedirectTo: `${origin}/auth/callback`,
+    },
+  });
 
-    return redirect("/home");
+  if (error) {
+    console.log(error.message);
+    if (error.message.toLowerCase().includes("already registered"))
+      return { error: "An account with this email already exists." };
+    return { error: "Could not create account. Please try again." };
+  }
+
+  redirect("/home");
 };

@@ -15,35 +15,35 @@
   --color-creme: #fefae0;
   --color-green-primary: #606c38;
 
-  /* Font sizes */
-  --font-size-10: 10px;
-  --font-size-11: 11px;
-  --font-size-13: 13px;
-  --font-size-14: 14px;
-  --font-size-15: 15px;
-  --font-size-16: 16px;
-  --font-size-18: 18px;
-  --font-size-20: 20px;
-  --font-size-21: 21px;
-  --font-size-22: 22px;
-  --font-size-23: 23px;
-  --font-size-24: 24px;
-  --font-size-28: 28px;
-  --font-size-29: 29px;
-  --font-size-30: 30px;
-  --font-size-35: 35px;
-  --font-size-37: 37px;
-  --font-size-44: 44px;
-  --font-size-46: 46px;
-  --font-size-48: 48px;
-  --font-size-54: 54px;
-  --font-size-58: 58px;
-  --font-size-62: 62px;
-  --font-size-66: 66px;
-  --font-size-70: 70px;
-  --font-size-79: 79px;
-  --font-size-90: 90px;
-  --font-size-100: 100px;
+  /* Font sizes  */
+  --text-10: 10px;
+  --text-11: 11px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-18: 18px;
+  --text-20: 20px;
+  --text-21: 21px;
+  --text-22: 22px;
+  --text-23: 23px;
+  --text-24: 24px;
+  --text-28: 28px;
+  --text-29: 29px;
+  --text-30: 30px;
+  --text-35: 35px;
+  --text-37: 37px;
+  --text-44: 44px;
+  --text-46: 46px;
+  --text-48: 48px;
+  --text-54: 54px;
+  --text-58: 58px;
+  --text-62: 62px;
+  --text-66: 66px;
+  --text-70: 70px;
+  --text-79: 79px;
+  --text-90: 90px;
+  --text-100: 100px;
 
   /* Animations */
   --animate-text: text 4s ease infinite;
@@ -64,6 +64,36 @@
   }
   .font-quicksand {
     font-family: var(--font-quicksand), system-ui;
+  }
+
+  .input-rainbow-focus:focus {
+    outline: none;
+    border-color: transparent;
+    background-image:
+      linear-gradient(white, white),
+      conic-gradient(
+        from var(--rainbow-angle),
+        #2dd4bf,
+        #c084fc,
+        #4ade80,
+        #38bdf8,
+        #2dd4bf
+      );
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+    animation: rainbow-spin 4s linear infinite;
+  }
+}
+
+@property --rainbow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rainbow-spin {
+  to {
+    --rainbow-angle: 360deg;
   }
 }
 

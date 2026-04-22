@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { ReactNode } from "react";
+import { Toaster } from "sonner";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <html lang="en">
             <body className="min-h-screen flex flex-col items-center">
                 {children}
+                <Toaster richColors position="top-center" />
             </body>
         </html>
     );
