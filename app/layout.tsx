@@ -1,4 +1,5 @@
 import "./globals.css";
+import type { ReactNode } from "react";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -11,13 +12,9 @@ export const metadata = {
         "Web app that allows user to track lifts, see other users progress, create posts and comment on others posts.",
 };
 
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html>
+        <html lang="en">
             <body className="min-h-screen flex flex-col items-center">
                 {children}
             </body>

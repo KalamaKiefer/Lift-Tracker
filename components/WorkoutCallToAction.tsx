@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 export const WorkoutCallToAction = async () => {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const {
         data: { user },
@@ -26,7 +26,7 @@ export const WorkoutCallToAction = async () => {
             </div>
             <Link
                 href="/workouts"
-                className="ml-auto mr-auto inline-flex items-center justify-center rounded-md border border-transparent 
+                className="ml-auto mr-auto inline-flex items-center justify-center rounded-md border border-transparent
       bg-green-primary py-2 text-base font-medium text-creme shadow-sm hover:brightness-110 transition mt-6 uppercase px-6 duration-500 ease-in-out"
             >
                 Create A Workout

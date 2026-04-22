@@ -5,73 +5,57 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
-const usernameSchema = z.string();
-const emailSchema = z.string();
-const passwordSchema = z.string();
+const emailSchema = z.string().email();
+const passwordSchema = z.string().min(8);
+const usernameSchema = z.string().min(2).max(30);
 
 export const signIn = async (formData: FormData) => {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const parseEmail = emailSchema.safeParse(formData.get("email"));
     const parsePassword = passwordSchema.safeParse(formData.get("password"));
 
     if (!parseEmail.success || !parsePassword.success) {
-        return redirect(
-            "/error?message=Error: Please provide a valid email or password."
-        );
+        return redirect("/error?message=Please provide a valid email and password.");
     }
 
-    const email = parseEmail.data;
-    const password = parsePassword.data;
-
     const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: parseEmail.data,
+        password: parsePassword.data,
     });
 
     if (error) {
-        return redirect("/error?message=Error: could not authenticate user.");
+        return redirect("/error?message=Invalid email or password.");
     }
 
-    return redirect("/protected");
+    return redirect("/home");
 };
 
 export const signUp = async (formData: FormData) => {
-    const supabase = createClient();
-    const origin = headers().get("origin");
+    const supabase = await createClient();
+    const headerStore = await headers();
+    const origin = headerStore.get("origin");
 
     const parseUsername = usernameSchema.safeParse(formData.get("username"));
     const parseEmail = emailSchema.safeParse(formData.get("email"));
     const parsePassword = passwordSchema.safeParse(formData.get("password"));
 
-    if (
-        !parseEmail.success ||
-        !parsePassword.success ||
-        !parseUsername.success
-    ) {
-        return redirect(
-            "/error?message=Error: Please provide a valid email or password."
-        );
+    if (!parseEmail.success || !parsePassword.success || !parseUsername.success) {
+        return redirect("/error?message=Please provide a valid username, email, and password (8+ characters).");
     }
 
-    const username = parseUsername.data;
-    const email = parseEmail.data;
-    const password = parsePassword.data;
-
     const { error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: parseEmail.data,
+        password: parsePassword.data,
         options: {
-            data: {
-                username,
-            },
+            data: { username: parseUsername.data },
             emailRedirectTo: `${origin}/auth/callback`,
         },
     });
 
     if (error) {
-        return redirect("/error?message=Error: could not sign up new user.");
+        return redirect("/error?message=Could not create account. The email may already be in use.");
     }
 
-    return redirect("/protected");
+    return redirect("/home");
 };
