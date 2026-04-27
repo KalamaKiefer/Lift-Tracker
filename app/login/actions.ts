@@ -65,7 +65,6 @@ export const signUp = async (
   });
 
   if (error) {
-    console.log(error.message);
     if (error.message.toLowerCase().includes("already registered"))
       return { error: "An account with this email already exists." };
     return { error: "Could not create account. Please try again." };
