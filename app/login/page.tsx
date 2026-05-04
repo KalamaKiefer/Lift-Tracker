@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { SubmitButton } from "../../components/SubmitButton";
 import { ArrowIcon } from "@/components/icons/Arrow";
 import { Button } from "@/components/Button";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 import { signIn } from "./actions";
 
 export default function Login() {
@@ -79,6 +80,14 @@ export default function Login() {
           <SubmitButton className="mt-3">Log In</SubmitButton>
           <Button href="/signup">Sign Up</Button>
         </form>
+
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 border-t border-gray-200" />
+          <span className="font-quicksand text-14 text-gray-400">or</span>
+          <div className="flex-1 border-t border-gray-200" />
+        </div>
+
+        <GoogleSignInButton />
       </div>
     </div>
   );

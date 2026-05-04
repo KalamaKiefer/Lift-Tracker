@@ -32,6 +32,8 @@ type ExerciseDraft = {
   sets: SetDraft[];
 };
 
+type QuickFillDraft = { sets: string; reps: string; weight: string };
+
 export function WorkoutBuilder({
   exercises: library,
 }: {
@@ -43,6 +45,8 @@ export function WorkoutBuilder({
   const [exercises, setExercises] = useState<ExerciseDraft[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [quickFillOpen, setQuickFillOpen] = useState<Record<string, boolean>>({});
+  const [quickFillDraft, setQuickFillDraft] = useState<Record<string, QuickFillDraft>>({});
 
   const filteredLibrary = searchQuery
     ? library.filter((ex) =>
@@ -126,6 +130,43 @@ export function WorkoutBuilder({
           : e,
       ),
     );
+  }
+
+  function openQuickFill(uid: string) {
+    setQuickFillOpen((prev) => ({ ...prev, [uid]: true }));
+    setQuickFillDraft((prev) => ({
+      ...prev,
+      [uid]: prev[uid] ?? { sets: "", reps: "", weight: "" },
+    }));
+  }
+
+  function closeQuickFill(uid: string) {
+    setQuickFillOpen((prev) => ({ ...prev, [uid]: false }));
+  }
+
+  function updateQuickFill(uid: string, field: keyof QuickFillDraft, value: string) {
+    setQuickFillDraft((prev) => ({
+      ...prev,
+      [uid]: { ...(prev[uid] ?? { sets: "", reps: "", weight: "" }), [field]: value },
+    }));
+  }
+
+  function applyQuickFill(uid: string) {
+    const draft = quickFillDraft[uid];
+    if (!draft) return;
+    const count = parseInt(draft.sets, 10);
+    if (!count || count < 1 || count > 20) {
+      toast.error("Sets must be between 1 and 20.");
+      return;
+    }
+    const newSets: SetDraft[] = Array.from({ length: count }, () => ({
+      reps: draft.reps,
+      weight_kg: draft.weight,
+    }));
+    setExercises((prev) =>
+      prev.map((e) => (e.uid === uid ? { ...e, sets: newSets } : e)),
+    );
+    closeQuickFill(uid);
   }
 
   function handleFinish() {
@@ -222,7 +263,7 @@ export function WorkoutBuilder({
                 Reps
               </span>
               <span className="font-quicksand text-xs text-gray-400 text-center">
-                kg
+                lbs
               </span>
               <span />
             </div>
@@ -268,14 +309,78 @@ export function WorkoutBuilder({
               </div>
             ))}
 
-            <button
-              type="button"
-              onClick={() => addSet(ex.uid)}
-              className="mt-1 flex items-center gap-1 font-quicksand text-14 text-green-primary hover:opacity-70 transition"
-            >
-              <PlusIcon className="w-4 h-4" />
-              Add Set
-            </button>
+            {quickFillOpen[ex.uid] ? (
+              <div className="mt-3 flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 font-quicksand text-14 text-matteBlack">
+                  <input
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={quickFillDraft[ex.uid]?.sets ?? ""}
+                    onChange={(e) => updateQuickFill(ex.uid, "sets", e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && applyQuickFill(ex.uid)}
+                    placeholder="sets"
+                    autoFocus
+                    className="w-14 rounded-md border border-gray-200 px-2 py-1 text-center focus:outline-none focus:border-green-primary transition"
+                  />
+                  <span className="text-gray-400">×</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={quickFillDraft[ex.uid]?.reps ?? ""}
+                    onChange={(e) => updateQuickFill(ex.uid, "reps", e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && applyQuickFill(ex.uid)}
+                    placeholder="reps"
+                    className="w-14 rounded-md border border-gray-200 px-2 py-1 text-center focus:outline-none focus:border-green-primary transition"
+                  />
+                  <span className="text-gray-400">@</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    value={quickFillDraft[ex.uid]?.weight ?? ""}
+                    onChange={(e) => updateQuickFill(ex.uid, "weight", e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && applyQuickFill(ex.uid)}
+                    placeholder="lbs"
+                    className="w-16 rounded-md border border-gray-200 px-2 py-1 text-center focus:outline-none focus:border-green-primary transition"
+                  />
+                  <span className="text-gray-400 text-xs">lbs</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => applyQuickFill(ex.uid)}
+                  className="font-quicksand text-14 font-semibold text-green-primary hover:opacity-70 transition"
+                >
+                  Apply
+                </button>
+                <button
+                  type="button"
+                  onClick={() => closeQuickFill(ex.uid)}
+                  className="text-gray-300 hover:text-gray-500 transition"
+                  aria-label="Cancel quick fill"
+                >
+                  <XIcon className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="mt-1 flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => addSet(ex.uid)}
+                  className="flex items-center gap-1 font-quicksand text-14 text-green-primary hover:opacity-70 transition"
+                >
+                  <PlusIcon className="w-4 h-4" />
+                  Add Set
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openQuickFill(ex.uid)}
+                  className="flex items-center gap-1 font-quicksand text-14 text-gray-400 hover:text-green-primary transition"
+                >
+                  Quick fill
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

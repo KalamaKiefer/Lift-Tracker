@@ -15,7 +15,9 @@ export const WorkoutCallToAction = async () => {
     >
       <div>
         <h1 className="text-24 sm:text-35 leading-none lg:text-54 font-ubuntu uppercase text-creme">
-          {user ? `Start Now ${user.user_metadata.username}!` : "Start Now!"}
+          {user
+            ? `Start Now ${user.user_metadata.username ?? user.user_metadata.full_name ?? ""}!`
+            : "Start Now!"}
         </h1>
         <p className="text-16 sm:text-18 font-quicksand text-creme max-w-125 mx-auto mt-2">
           Create a workout now so you can save that workout and track your

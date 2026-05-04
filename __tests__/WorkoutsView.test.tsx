@@ -138,7 +138,7 @@ describe("WorkoutsView — calendar view", () => {
     // April 20 has "Push Day" — find the enabled button with text "20"
     const day20 = screen
       .getAllByRole("button")
-      .find((btn) => btn.textContent?.trim() === "20" && !btn.disabled);
+      .find((btn) => btn.textContent?.trim() === "20" && !(btn as HTMLButtonElement).disabled);
     expect(day20).toBeDefined();
     fireEvent.click(day20!);
     expect(screen.getByText("Push Day")).toBeInTheDocument();
@@ -149,7 +149,7 @@ describe("WorkoutsView — calendar view", () => {
     switchToCalendar();
     const day20 = screen
       .getAllByRole("button")
-      .find((btn) => btn.textContent?.trim() === "20" && !btn.disabled);
+      .find((btn) => btn.textContent?.trim() === "20" && !(btn as HTMLButtonElement).disabled);
     fireEvent.click(day20!);
     // Panel visible
     expect(screen.getByText("Push Day")).toBeInTheDocument();
@@ -163,7 +163,7 @@ describe("WorkoutsView — calendar view", () => {
     switchToCalendar();
     const day20 = screen
       .getAllByRole("button")
-      .find((btn) => btn.textContent?.trim() === "20" && !btn.disabled);
+      .find((btn) => btn.textContent?.trim() === "20" && !(btn as HTMLButtonElement).disabled);
     fireEvent.click(day20!);
     expect(screen.getByText("Push Day")).toBeInTheDocument();
     fireEvent.click(screen.getByLabelText("Next month"));

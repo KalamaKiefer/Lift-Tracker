@@ -47,7 +47,7 @@ const LIBRARY = [
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockUseRouter.mockReturnValue({ push: mockPush } as ReturnType<
+  mockUseRouter.mockReturnValue({ push: mockPush } as unknown as ReturnType<
     typeof useRouter
   >);
 });

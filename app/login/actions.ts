@@ -11,6 +11,24 @@ const usernameSchema = z.string().min(2).max(30);
 
 export type ActionState = { error: string } | null;
 
+export const signInWithGoogle = async (): Promise<ActionState> => {
+  const supabase = await createClient();
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${siteUrl}/auth/callback`,
+    },
+  });
+
+  if (error) return { error: "Could not initialize Google sign-in." };
+  if (data.url) redirect(data.url);
+  return { error: "Could not initialize Google sign-in." };
+};
+
 export const signIn = async (
   _prev: ActionState,
   formData: FormData,

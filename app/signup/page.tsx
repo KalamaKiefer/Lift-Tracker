@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { signUp } from "../login/actions";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 export default function SignUp() {
   const [state, action] = useActionState(signUp, null);
@@ -91,6 +92,14 @@ export default function SignUp() {
           <SubmitButton className="mt-3">Create Account</SubmitButton>
           <Button href="/login">Log In</Button>
         </form>
+
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 border-t border-gray-200" />
+          <span className="font-quicksand text-14 text-gray-400">or</span>
+          <div className="flex-1 border-t border-gray-200" />
+        </div>
+
+        <GoogleSignInButton />
       </div>
     </div>
   );

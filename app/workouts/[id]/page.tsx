@@ -151,7 +151,7 @@ export default async function WorkoutDetailPage({
                           </td>
                           <td className="font-quicksand text-14 text-matteBlack py-2">
                             {set.weight_kg != null
-                              ? `${set.weight_kg} kg`
+                              ? `${set.weight_kg} lbs`
                               : "—"}
                           </td>
                         </tr>
