@@ -15,6 +15,7 @@ export default async function WorkoutDetailPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
   if (!user) redirect("/login");
 
   const { data: workout } = await supabase
@@ -44,13 +45,14 @@ export default async function WorkoutDetailPage({
   );
 
   const date = new Date(workout.completed_at);
+
   const totalSets = sortedExercises.reduce(
     (acc, ex) => acc + (ex.sets?.length ?? 0),
     0,
   );
 
   return (
-    <ContentContainer>
+    <ContentContainer className="py-10!">
       <div className="mb-6">
         <Link
           href="/workouts"
@@ -63,7 +65,7 @@ export default async function WorkoutDetailPage({
 
       <div className="mb-8">
         <h1 className="font-ubuntu text-37 text-matteBlack">{workout.title}</h1>
-        <p className="font-quicksand text-16 text-gray-400 mt-1">
+        <p className="font-quicksand text-16 text-green-primary mt-1">
           {date.toLocaleDateString("en-US", {
             weekday: "long",
             month: "long",
@@ -71,11 +73,13 @@ export default async function WorkoutDetailPage({
             year: "numeric",
           })}
         </p>
+
         {workout.notes && (
           <p className="font-quicksand text-14 text-gray-500 mt-3 italic">
             {workout.notes}
           </p>
         )}
+
         <div className="flex items-center gap-6 mt-4">
           <Stat label="Exercises" value={sortedExercises.length} />
           <Stat label="Total Sets" value={totalSets} />
@@ -171,7 +175,7 @@ export default async function WorkoutDetailPage({
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div>
-      <p className="font-quicksand text-xs text-gray-400 uppercase tracking-wide">
+      <p className="font-quicksand text-xs text-matteBlack uppercase tracking-wide">
         {label}
       </p>
       <p className="font-ubuntu text-24 text-green-primary">{value}</p>

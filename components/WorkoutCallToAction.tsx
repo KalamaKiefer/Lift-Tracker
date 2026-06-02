@@ -25,7 +25,7 @@ export const WorkoutCallToAction = async () => {
         </p>
       </div>
       <Link
-        href="/workouts"
+        href="/workouts/new"
         className="ml-auto mr-auto inline-flex items-center justify-center rounded-md border border-transparent
       bg-green-primary py-2 text-base font-medium text-creme shadow-sm hover:brightness-110 transition mt-6 uppercase px-6 duration-500 ease-in-out"
       >

@@ -30,7 +30,6 @@ export default function WorkoutsLayout({
       <main className="min-h-screen flex flex-col items-center">
         {children}
       </main>
-      <Footer />
     </div>
   );
 }

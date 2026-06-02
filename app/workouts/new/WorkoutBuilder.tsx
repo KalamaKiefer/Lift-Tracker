@@ -45,8 +45,12 @@ export function WorkoutBuilder({
   const [exercises, setExercises] = useState<ExerciseDraft[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [quickFillOpen, setQuickFillOpen] = useState<Record<string, boolean>>({});
-  const [quickFillDraft, setQuickFillDraft] = useState<Record<string, QuickFillDraft>>({});
+  const [quickFillOpen, setQuickFillOpen] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [quickFillDraft, setQuickFillDraft] = useState<
+    Record<string, QuickFillDraft>
+  >({});
 
   const filteredLibrary = searchQuery
     ? library.filter((ex) =>
@@ -144,28 +148,40 @@ export function WorkoutBuilder({
     setQuickFillOpen((prev) => ({ ...prev, [uid]: false }));
   }
 
-  function updateQuickFill(uid: string, field: keyof QuickFillDraft, value: string) {
+  function updateQuickFill(
+    uid: string,
+    field: keyof QuickFillDraft,
+    value: string,
+  ) {
     setQuickFillDraft((prev) => ({
       ...prev,
-      [uid]: { ...(prev[uid] ?? { sets: "", reps: "", weight: "" }), [field]: value },
+      [uid]: {
+        ...(prev[uid] ?? { sets: "", reps: "", weight: "" }),
+        [field]: value,
+      },
     }));
   }
 
   function applyQuickFill(uid: string) {
     const draft = quickFillDraft[uid];
     if (!draft) return;
+
     const count = parseInt(draft.sets, 10);
+
     if (!count || count < 1 || count > 20) {
       toast.error("Sets must be between 1 and 20.");
       return;
     }
+
     const newSets: SetDraft[] = Array.from({ length: count }, () => ({
       reps: draft.reps,
       weight_kg: draft.weight,
     }));
+
     setExercises((prev) =>
       prev.map((e) => (e.uid === uid ? { ...e, sets: newSets } : e)),
     );
+
     closeQuickFill(uid);
   }
 
@@ -317,8 +333,12 @@ export function WorkoutBuilder({
                     min="1"
                     max="20"
                     value={quickFillDraft[ex.uid]?.sets ?? ""}
-                    onChange={(e) => updateQuickFill(ex.uid, "sets", e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && applyQuickFill(ex.uid)}
+                    onChange={(e) =>
+                      updateQuickFill(ex.uid, "sets", e.target.value)
+                    }
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && applyQuickFill(ex.uid)
+                    }
                     placeholder="sets"
                     autoFocus
                     className="w-14 rounded-md border border-gray-200 px-2 py-1 text-center focus:outline-none focus:border-green-primary transition"
@@ -328,8 +348,12 @@ export function WorkoutBuilder({
                     type="number"
                     min="1"
                     value={quickFillDraft[ex.uid]?.reps ?? ""}
-                    onChange={(e) => updateQuickFill(ex.uid, "reps", e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && applyQuickFill(ex.uid)}
+                    onChange={(e) =>
+                      updateQuickFill(ex.uid, "reps", e.target.value)
+                    }
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && applyQuickFill(ex.uid)
+                    }
                     placeholder="reps"
                     className="w-14 rounded-md border border-gray-200 px-2 py-1 text-center focus:outline-none focus:border-green-primary transition"
                   />
@@ -339,8 +363,12 @@ export function WorkoutBuilder({
                     min="0"
                     step="0.5"
                     value={quickFillDraft[ex.uid]?.weight ?? ""}
-                    onChange={(e) => updateQuickFill(ex.uid, "weight", e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && applyQuickFill(ex.uid)}
+                    onChange={(e) =>
+                      updateQuickFill(ex.uid, "weight", e.target.value)
+                    }
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && applyQuickFill(ex.uid)
+                    }
                     placeholder="lbs"
                     className="w-16 rounded-md border border-gray-200 px-2 py-1 text-center focus:outline-none focus:border-green-primary transition"
                   />
