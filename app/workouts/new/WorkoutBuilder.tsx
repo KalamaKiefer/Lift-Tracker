@@ -224,14 +224,15 @@ export function WorkoutBuilder({
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="font-ubuntu text-37 text-matteBlack bg-transparent border-b-2 border-transparent hover:border-gray-200 focus:border-green-primary focus:outline-none flex-1 min-w-0 transition placeholder:text-gray-300"
+          className="font-ubuntu text-37 text-matteBlack bg-transparent border-b-2 border-transparent hover:border-matteBlack/60 focus:border-green-primary focus:outline-none flex-1 min-w-0 transition placeholder:text-gray-300"
           placeholder="Workout Title"
         />
+
         <button
           type="button"
           onClick={handleFinish}
           disabled={isPending}
-          className="shrink-0 bg-green-primary text-creme px-5 py-2.5 rounded-md font-quicksand font-semibold text-16 hover:brightness-110 transition disabled:opacity-50"
+          className="shrink-0 bg-green-primary text-creme px-5 py-2.5 rounded-md font-quicksand font-semibold text-16 hover:brightness-110 transition disabled:opacity-50 cursor-pointer"
         >
           {isPending ? "Saving…" : "Finish"}
         </button>
@@ -487,7 +488,7 @@ export function WorkoutBuilder({
           <button
             type="button"
             onClick={() => setShowSearch(true)}
-            className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-200 rounded-xl p-4 font-quicksand text-14 text-gray-400 hover:border-green-primary hover:text-green-primary transition"
+            className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-200 rounded-xl p-4 font-quicksand text-14 text-gray-400 hover:border-green-primary hover:text-green-primary transition cursor-pointer"
           >
             <PlusIcon className="w-5 h-5" />
             Add Exercise

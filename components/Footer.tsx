@@ -29,22 +29,8 @@ export const Footer = () => {
           <FooterNavItem href="/guides" title="Guides" />
           <FooterNavItem href="/workouts" title="Workouts" />
         </nav>
-        <div className="mt-8 flex justify-center space-x-6">
-          <FooterNavItem href="/calendar" title="Github" />
-          <a
-            href={"github.com"}
-            className="text-creme hover:text-gray-500 duration-500 ease-in-out"
-          >
-            <span className="sr-only">Instagram</span>
-          </a>
-          <a
-            href={"github.com"}
-            className="text-creme hover:text-gray-500 duration-500 ease-in-out"
-          >
-            <span className="sr-only">Linkdin</span>
-          </a>
-        </div>
-        <p className="mt-8 text-center text-base text-creme">
+
+        <p className="mt-12 text-center text-base text-creme">
           &copy; 2026 Kiefer Inc. All rights reserved.
         </p>
       </div>
